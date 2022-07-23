@@ -1,12 +1,16 @@
-require "core"
-require "core.options"
+if vim.g.vscode == true then
+  require "vscode"
+else
+  require "core"
+  require "core.options"
 
-vim.defer_fn(function()
-  require("core.utils").load_mappings()
-end, 0)
+  vim.defer_fn(function()
+    require("core.utils").load_mappings()
+  end, 0)
 
--- setup packer + plugins
-require("core.packer").bootstrap()
-require "plugins"
+  -- setup packer + plugins
+  require("core.packer").bootstrap()
+  require "plugins"
 
-pcall(require, "custom")
+  pcall(require, "custom")
+end
