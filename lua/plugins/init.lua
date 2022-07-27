@@ -19,7 +19,7 @@ local plugins = {
   ["NvChad/ui"] = {
     after = "base46",
     config = function()
-      require("plugins.configs.nvchad_ui").load_ui_plugins()
+      require("plugins.configs.others").nvchad_ui()
     end,
   },
 
@@ -50,7 +50,7 @@ local plugins = {
   ["NvChad/nvim-colorizer.lua"] = {
     opt = true,
     setup = function()
-      require("core.lazy_load").colorizer()
+      require("core.lazy_load").on_file_open "nvim-colorizer.lua"
     end,
     config = function()
       require("plugins.configs.others").colorizer()
@@ -82,19 +82,19 @@ local plugins = {
 
   -- lsp stuff
 
-  ["williamboman/nvim-lsp-installer"] = {
-    opt = true,
-    cmd = require("core.lazy_load").lsp_cmds,
-    setup = function()
-      require("core.lazy_load").on_file_open "nvim-lsp-installer"
+  ["williamboman/mason.nvim"] = {
+    cmd = require("core.lazy_load").mason_cmds,
+    config = function()
+      require "plugins.configs.mason"
     end,
   },
 
   ["neovim/nvim-lspconfig"] = {
-    after = "nvim-lsp-installer",
-    module = "lspconfig",
+    opt = true,
+    setup = function()
+      require("core.lazy_load").on_file_open "nvim-lspconfig"
+    end,
     config = function()
-      require "plugins.configs.lsp_installer"
       require "plugins.configs.lspconfig"
     end,
   },

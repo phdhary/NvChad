@@ -10,10 +10,10 @@ require "nvchad_ui.lsp"
 local M = {}
 local utils = require "core.utils"
 
-M.on_attach = function(client, bufnr)
-  local vim_version = vim.version()
+-- export on_attach & capabilities for custom lspconfigs
 
-  if vim_version.minor > 7 then
+M.on_attach = function(client, bufnr)
+  if vim.g.vim_version > 7 then
     -- nightly
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentRangeFormattingProvider = false
@@ -31,9 +31,9 @@ M.on_attach = function(client, bufnr)
   end
 end
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+M.capabilities = vim.lsp.protocol.make_client_capabilities()
 
-capabilities.textDocument.completion.completionItem = {
+M.capabilities.textDocument.completion.completionItem = {
   documentationFormat = { "markdown", "plaintext" },
   snippetSupport = true,
   preselectSupport = true,
@@ -53,7 +53,7 @@ capabilities.textDocument.completion.completionItem = {
 
 lspconfig.sumneko_lua.setup {
   on_attach = M.on_attach,
-  capabilities = capabilities,
+  capabilities = M.capabilities,
 
   settings = {
     Lua = {
@@ -71,12 +71,5 @@ lspconfig.sumneko_lua.setup {
     },
   },
 }
-
--- requires a file containing user's lspconfigs
-local addlsp_confs = utils.load_config().plugins.options.lspconfig.setup_lspconf
-
-if #addlsp_confs ~= 0 then
-  require(addlsp_confs).setup_lsp(M.on_attach, capabilities)
-end
 
 return M
